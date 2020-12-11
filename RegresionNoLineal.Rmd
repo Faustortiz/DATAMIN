@@ -1,0 +1,69 @@
+---
+title: "RegresionNoLineal"
+author: "Fausto Ortiz"
+date: "8/12/2020"
+output: pdf_document
+---
+
+```{r}
+set.seed(1)
+
+indice <- sample(nrow(datos), 0.8*nrow(datos), replace = FALSE)
+datos.train <- datos[indice,]
+datos.test <- datos[-indice,]
+```
+
+#Aplicacion de la regresion GAM.
+
+```{r}
+library("leaps")
+library("gam")
+
+modelo.gam <- gam(Price ~ ., data=datos.train)
+```
+
+
+```{r}
+summary(modelo.gam)
+```
+Notamos que al aplicar GAM hay muchas variables en el dataset que no influyen significativamente en el modelo planteado lo que vamos a proceder a eliminarlas y volver a aplicar el modelo con un dataset mucho mas chico.
+
+#Nuevo dataset
+```{r}
+nuevo_dataset <- dataset[c("Price","Age_08_04", "Mfg_Year", "KM", "HP", "Automatic", "cc", "Doors", "Gears", "Weight", "Mfr_Guarantee", "Guarantee_Period", "Airco", "Central_Lock")]
+```
+
+
+Volvemos aplicar GAM en el nuevo dataset
+```{r}
+set.seed(1)
+
+indice <- sample(nrow(nuevo_dataset), 0.8*nrow(nuevo_dataset), replace = FALSE)
+datos.Train <- nuevo_dataset[indice,]
+datos.Test <- nuevo_dataset[-indice,]
+```
+
+```{r}
+
+modelo.gam1 <- gam(Price ~ ., data=datos.train)
+
+summary(modelo.gam1)
+```
+
+
+```{r}
+pred.modelo.gam <-  predict(modelo.gam, datos.test)
+test.error.gam <- mean((pred.modelo.gam - datos.test$Price)^2)
+test.error.gam
+```
+
+```{r}
+SST <- mean((datos.test$Price - mean(datos.test$Price))^2)
+SSE <- test.error.gam
+R2 <- 1 - SSE / SST
+R2
+```
+```{r}
+plot(modelo.gam1)
+```
+

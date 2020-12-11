@@ -1,0 +1,7 @@
+"0","pred.modelo.gam <-  predict(modelo.gam, datos.test)"
+"0","test.error.gam <- mean((pred.modelo.gam - datos.test$Price)^2)"
+"0","test.error.gam"
+"1","[1]"
+"1"," 928618.5"
+"1","
+"

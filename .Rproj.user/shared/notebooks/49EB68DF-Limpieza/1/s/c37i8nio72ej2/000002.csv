@@ -1,0 +1,6 @@
+"0","sum(is.na(datos))"
+"1","[1]"
+"1"," 0"
+"1","
+"
+"0","datos = na.omit(datos)"

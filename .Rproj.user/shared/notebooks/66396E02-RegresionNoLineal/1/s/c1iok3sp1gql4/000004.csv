@@ -1,0 +1,4 @@
+"0","library(""leaps"")"
+"0","library(""gam"")"
+"0",""
+"0","modelo.gam <- gam(Price ~ ., data=datos.train)"

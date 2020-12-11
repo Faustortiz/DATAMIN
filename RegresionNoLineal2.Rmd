@@ -1,0 +1,105 @@
+---
+title: "Recuperación Primer Parcial - Regresión no Lineal"
+author: "Navarro Matias, Ortiz Fausto - Universidad Tecnológica Nacional - Facultad Regional Tucumán"
+date: "11/12/2020"
+output: pdf_document
+---
+
+
+```{r}
+set.seed(1)
+
+indice <- sample(nrow(datos), 0.8*nrow(datos), replace = FALSE)
+datos.train <- datos[indice,]
+datos.test <- datos[-indice,]
+```
+Partimos el dataset en 80-20.
+
+```{r}
+ggplot(datos, aes(x=KM, y=Price)) + geom_point(colour = "firebrick3") +
+ggtitle("Distribución Price vs KM")
+```
+Al realizar esta distribución notamos que lo que se divisa no es una recta sino una curva que sería la mejor forma de representar los datos de precios vs KM lo que podemos proceder una regresión no lineal sobre estas variables.
+
+
+#########
+# Polinomio.
+#########
+```{r}
+library(boot)
+# Vector para almacenar el error de validación de cada polinomio
+cv.error <- rep(NA, 10)
+# Vector para almacenar el RSS de cada polinomio
+rss <- rep (NA, 10)
+for (i in 1:10){
+modelo.poli <- glm(Price ~ poly(KM, i), data = datos.train)
+set.seed(2)
+cv.error[i] <- cv.glm(datos.train, modelo.poli, K = 10)$delta[1]
+rss[i] <- sum(modelo.poli$residuals^2)
+}
+
+ggplot(data = data.frame(polinomio = 1:10, cv.error = cv.error), 
+       aes(x = polinomio, y = cv.error)) +
+geom_point(color = "orangered2") +
+geom_path() +
+scale_x_continuous(breaks = 0:10) +
+labs(title = "cv.MSE  ~ Grado de polinomio") +
+theme_bw() +
+theme(panel.background = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+theme(plot.title = element_text(hjust = 0.5))
+```
+En esta gráfica se puede ver como el cv.error va variando a medidas que ingresamos mas polinomios sobre la variable km en donde tratamos de buscar lo que es el polinomio mas bajo que ayude a predecir el valor del precio, es decir elegir el mejor grado de polinomio optimo para tenerlo en cuenta.(verificar esto mat.)
+
+```{r}
+ggplot(data = data.frame(polinomio = 1:10, RSS = rss), aes(x = polinomio, 
+                                                           y = RSS)) +
+geom_point(color = "orangered2") +
+geom_path() +
+scale_x_continuous(breaks=0:10) +
+labs(title = "RSS  ~ Grado de polinomio") +
+theme_bw() +
+theme(panel.background = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+theme(plot.title = element_text(hjust = 0.5))
+```
+Siguiendo la misma lógica gráficamos los RSS en contraste con el grado del polinomio.
+
+```{r}
+
+which.min(cv.error)
+```
+Optenemos el Polinomio donde el cv.error será el mas bajo. para acontinuación introducirlo en un modelo de regresión.
+
+Polinomio con KM grado 2.
+
+```{r}
+modelo.poli <- lm(Price ~ poly(KM, 2), data = datos.train)
+summary(modelo.poli)
+```
+Notamos que los residuales no estan balanceados pero notamos tmb que la regresión nos tira unos datos que aunque en terminos de coeficientes son buenos lo resultados no son los esperados ya que nos da un alto RSE y un R^2 lo que no estariamos de una buena representación con un solo predictor.
+
+```{r}
+ggplot(data = datos.train, aes(x = KM, y = Price)) +
+geom_point(col = "darkgrey") +
+geom_smooth(method = "lm", formula = y ~ poly(x, 2), color = "blue", se = TRUE, 
+            level = 0.95) +
+labs(title = "Polinomio grado 2: Precio ~ KM") +
+theme_bw() + theme(plot.title = element_text(hjust = 0.5))
+```
+Graficamos el modelo para observar como se quedaria la curva sobre los datos que necesitamos representar y aunque el modelo tiene muchas fugas con un solo predictor se observa que la curva se ajusta bastante bien lo que denota que la gráfica tiene problemas y deberiamos limpiar el dataset. (ya voy a probar con el dataset limpio.)
+
+A continuación regresionamos con mas polinomios para asegurar que el mejor polinomio es de grado 2.
+```{r}
+modelo1 <- lm(Price ~ KM, data = datos.train)
+modelo2 <- lm(Price ~ poly(KM, 2), data = datos.train)
+modelo3 <- lm(Price ~ poly(KM, 3), data = datos.train)
+
+anova(modelo1, modelo2, modelo3)
+```
+Lo que podemo observar que para un grado 3 ya no tiene significacia para el modelo lo que aseguramos que para KM el grado del polinomio es igual a 2.
+
+########
+# Conclusión
+#######
+
+Al Incursionar en este nuevo metodo de regresión notamos que a pesar de ser un modelo con un R^2  muy bajo a lo que estamos acostumbrados en terminos de representatividad es mucho mejor que la regresión lineal acostumbrada, de igual modo seguir indagando sobre este tema nos ayudara a poder tener una mejor compresión de este problema.(estocada final matias.)
+

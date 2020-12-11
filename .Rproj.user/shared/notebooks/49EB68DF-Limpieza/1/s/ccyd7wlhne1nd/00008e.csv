@@ -1,0 +1,2 @@
+"0","#pie(summary(factorizado$waterfront),labels = c(""no"", ""si""), main = ""waterfront"")"
+"0","boxplot(datos$Automatic, main = ""Automatic"")"

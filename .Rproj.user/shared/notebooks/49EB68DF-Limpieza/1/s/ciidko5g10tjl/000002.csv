@@ -1,0 +1,2 @@
+"0","dataset <- read.csv(""ToyotaCorollaLimpio2.csv"")"
+"0","dataset$X <- NULL"

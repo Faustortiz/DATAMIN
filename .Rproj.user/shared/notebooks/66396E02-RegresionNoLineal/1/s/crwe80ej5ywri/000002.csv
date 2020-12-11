@@ -1,0 +1,5 @@
+"0","set.seed(1)"
+"0",""
+"0","indice <- sample(nrow(nuevo_dataset), 0.8*nrow(nuevo_dataset), replace = FALSE)"
+"0","datos.Train <- nuevo_dataset[indice,]"
+"0","datos.Test <- nuevo_dataset[-indice,]"

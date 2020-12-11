@@ -1,0 +1,2 @@
+"0","datos <- read.csv(""ToyotaCorollaLimpio.csv"")"
+"0","datos"

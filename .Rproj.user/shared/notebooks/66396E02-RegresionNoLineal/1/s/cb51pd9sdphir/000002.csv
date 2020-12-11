@@ -1,0 +1,8 @@
+"0","SST <- mean((datos.test$Price - mean(datos.test$Price))^2)"
+"0","SSE <- test.error.gam"
+"0","R2 <- 1 - SSE / SST"
+"0","R2"
+"1","[1]"
+"1"," 0.8600481"
+"1","
+"

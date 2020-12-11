@@ -1,0 +1,1 @@
+"0","nuevo_dataset <- dataset[c(""Price"",""Age_08_04"", ""Mfg_Year"", ""KM"", ""HP"", ""Automatic"", ""cc"", ""Doors"", ""Gears"", ""Weight"", ""Mfr_Guarantee"", ""Guarantee_Period"", ""Airco"", ""Central_Lock"")]"
