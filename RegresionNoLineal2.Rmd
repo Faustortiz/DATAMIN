@@ -19,7 +19,7 @@ Partimos el dataset en 80-20.
 ggplot(datos, aes(x=KM, y=Price)) + geom_point(colour = "firebrick3") +
 ggtitle("Distribución Price vs KM")
 ```
-Al realizar esta distribución notamos que lo que se divisa no es una recta sino una curva que sería la mejor forma de representar los datos de precios vs KM lo que podemos proceder una regresión no lineal sobre estas variables.
+Al realizar esta distribución notamos que lo que se divisa no es una recta sino una curva que sería la mejor forma de representar los datos de precios vs KM por lo que podemos procedemos a realizar una regresión no lineal sobre estas variables.
 
 
 #########
@@ -48,7 +48,7 @@ theme_bw() +
 theme(panel.background = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
 theme(plot.title = element_text(hjust = 0.5))
 ```
-En esta gráfica se puede ver como el cv.error va variando a medidas que ingresamos mas polinomios sobre la variable km en donde tratamos de buscar lo que es el polinomio mas bajo que ayude a predecir el valor del precio, es decir elegir el mejor grado de polinomio optimo para tenerlo en cuenta.(verificar esto mat.)
+En esta gráfica se puede ver como el cv.error va variando a medidas que ingresamos mas polinomios sobre la variable km en donde tratamos de buscar el polinomio mas bajo que ayude a predecir el valor del precio, es decir elegir el mejor grado de polinomio optimo para tenerlo en cuenta.(verificar esto mat.)
 
 ```{r}
 ggplot(data = data.frame(polinomio = 1:10, RSS = rss), aes(x = polinomio, 
@@ -85,7 +85,7 @@ geom_smooth(method = "lm", formula = y ~ poly(x, 2), color = "blue", se = TRUE,
 labs(title = "Polinomio grado 2: Precio ~ KM") +
 theme_bw() + theme(plot.title = element_text(hjust = 0.5))
 ```
-Graficamos el modelo para observar como se quedaria la curva sobre los datos que necesitamos representar y aunque el modelo tiene muchas fugas con un solo predictor se observa que la curva se ajusta bastante bien lo que denota que la gráfica tiene problemas y deberiamos limpiar el dataset. (ya voy a probar con el dataset limpio.)
+Graficamos el modelo para observar como se quedaria la curva sobre los datos que necesitamos representar y aunque el modelo tiene muchas fugas con un solo predictor se observa que la curva se ajusta bastante bien lo que denota que la gráfica tiene problemas y a dada tal situación consideramos que deberiamos limpiar el dataset. 
 
 A continuación regresionamos con mas polinomios para asegurar que el mejor polinomio es de grado 2.
 ```{r}
@@ -95,11 +95,10 @@ modelo3 <- lm(Price ~ poly(KM, 3), data = datos.train)
 
 anova(modelo1, modelo2, modelo3)
 ```
-Lo que podemo observar que para un grado 3 ya no tiene significacia para el modelo lo que aseguramos que para KM el grado del polinomio es igual a 2.
-
+Lo que podemos observar aquí es que un polinomio grado 3 ya no tiene significacia para el modelo por lo que aseguramos que nos conviene quedarnos con el polinomio de grado 2.
 ########
 # Conclusión
 #######
 
-Al Incursionar en este nuevo metodo de regresión notamos que a pesar de ser un modelo con un R^2  muy bajo a lo que estamos acostumbrados en terminos de representatividad es mucho mejor que la regresión lineal acostumbrada, de igual modo seguir indagando sobre este tema nos ayudara a poder tener una mejor compresión de este problema.(estocada final matias.)
+Al Incursionar en este nuevo metodo de regresión notamos que a pesar de ser un modelo con un R^2  muy bajo en relación a lo que estamos acostumbrados en terminos de representatividad; es mucho mejor que la regresión lineal que empleamos usualmente. De igual modo encpntramos relevante seguir indagando sobre este tema, ya que nos ayudara a poder tener una mejor compresión de este problema y contar con una herramienta más a la hora de analizar y trabajar con distintos grupos de datos.
 
